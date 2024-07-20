@@ -1,18 +1,14 @@
-import { returnMyDay, weekAhead, seeAllTasks, returnCompleted, returnProjects } from "./taskFilter"
+import { currentDay, weekAhead, seeAllTasks, returnCompleted, returnProjects } from "./taskFilter"
 import { Tasks } from "./fileLoader";
 
 const DOMController = function () {
-
-    const allTasks = document.querySelector("#all-tasks");
-    allTasks.addEventListener("click", () => seeAllTasks())
-
     const displayContainer = document.querySelector(".container")
 
-    const createNewElement = (element, addClassArray, textContent, listenerCallback) => {
+    const createNewElement = (element, classArray, textContent, listenerCallback) => {
         const newElement = document.createElement(element)
 
-        if (addClassArray) {
-            newElement.classList.add(...addClassArray)
+        if (classArray) {
+            newElement.classList.add(...classArray)
         }
 
         if (textContent) {
@@ -29,16 +25,16 @@ const DOMController = function () {
     const createTaskDisplay = (array) => {
         displayContainer.innerHTML = "";
 
-        array.itemList.forEach((taskItem) => {
+        array.forEach((taskItem) => {
             const taskOuter = createTaskItem(taskItem)
             displayContainer.appendChild(taskOuter)
         })
     }
 
-    const createTaskItem = (taskItem, parentArray) => {
+    const createTaskItem = (taskItem) => {
         const taskOuter = createNewElement("article", ["task-outer", taskItem.priority])
 
-        const taskCompleted = createNewElement("input")
+        const taskCompleted = createNewElement("input", "completed-checkbox")
         taskCompleted.setAttribute("type", "checkbox")
 
         const taskTitle = createNewElement("div", ["task-title"], taskItem.title)
@@ -58,11 +54,34 @@ const DOMController = function () {
         taskOuter.appendChild(taskPriority)
         taskOuter.appendChild(deleteTask)
 
-        return taskOuter
+        return taskOuter;
     }
 
-    return { createTaskDisplay, createTaskItem }
+    return { createTaskDisplay }
 
+}();
+
+const buttonListeners = function () {
+    const changeActiveClass = (target) => {
+        const allButtons = document.querySelectorAll("li")
+        allButtons.forEach((button) => button.classList.remove("active"))
+        target.classList.add("active")
+    }
+
+    const addClickHandler = function (selector, callback) {
+        const targetElement = document.querySelector(selector)
+        targetElement.addEventListener("click", () => {
+            changeActiveClass(targetElement);
+            DOMController.createTaskDisplay(callback())
+        })
+    }
+
+    addClickHandler("#all-tasks", seeAllTasks)
+    addClickHandler("#the-week", weekAhead)
+    addClickHandler("#my-day", currentDay)
+    addClickHandler("#show-completed", returnCompleted)
+
+    return { addClickHandler }
 }();
 
 
