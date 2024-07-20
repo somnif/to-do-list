@@ -1,9 +1,8 @@
-class Project {
+import { v4 as uuidv4 } from 'uuid'
+
+export default class ProjectItem {
     constructor(name){
         this.name = name
-    }
-
-    changeName(newName) {
-        this.name = newName
+        this.id = uuidv4();
     }
 }

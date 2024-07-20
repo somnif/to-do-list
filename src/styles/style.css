@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 3rem 1fr;
+}
+
+header {
+    grid-column: span 2;
+    background-color: green;
+}
+
+nav {
+    background-color: grey;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style: none;
+    font-size: 1.3rem;
+    margin: 1rem;
+    padding: 1rem 0.5rem;
+    border: black solid 1px;
+    border-radius: 0.3rem;
+}
+
+.delete-button {
+    background-color: black;
+    height: 1em;
+    width: 1em;
+}

@@ -1,15 +1,18 @@
-const uuidv4 = require("uuid/v4")
+import { v4 as uuidv4 } from 'uuid'
 
-class TaskItem {
+export default class TaskItem {
     constructor(title, description, dueDate, priority) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.id = uuidv4();
+        this.completed = false;
     }
 
     addToProject(project) {
-        this.isProjectIn = project.name
+        this.isProjectIn = project.id
     }
+
+    
 }

@@ -1,15 +1,15 @@
 export default class ItemList {
     constructor(savedData = []) {
-        this.taskListArray = savedData
+        this.itemList = savedData
     }
 
-    addTaskToList (newTask) {
-        this.taskListArray.push(newTask)
+    addItem (newItem) {
+        this.itemList.push(newItem)
     }
 
-    removeTaskFromList (removedTask) {
-        this.taskListArray = this.taskListArray.filter((task) => {
-            task.id !== removedTask.id
-        })
+    removeItem (removedItem) {
+        this.itemList = this.itemList.filter(item => item.id !== removedItem.id
+        )
     }
 }
+
