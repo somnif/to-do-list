@@ -50,11 +50,20 @@ li.active {
 
 .edit-button,
 .delete-button,
-.priority-box  {
+.priority-box,
+.completed-box  {
     height: 2em;
     width: 2em;
 }
 
+
+.completed-box.task-complete {
+    background-color: green;
+}
+
+.completed-box.task-not-complete {
+    background-color: red;
+}
 
 .container {
     display: flex;
@@ -128,6 +137,9 @@ li.active {
     height: 0px;
 }
 
+.required {
+    background-color: red;
+}
 
 #modal-box form {
     display: grid;

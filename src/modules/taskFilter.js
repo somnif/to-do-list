@@ -1,5 +1,4 @@
 import { Projects, Tasks } from "./fileLoader";
-import DOMController from "./DOMController";
 
 function currentDay() {
     console.log("current Day")

@@ -1,22 +1,31 @@
 import { v4 as uuidv4 } from 'uuid'
 
 export default class TaskItem {
-    constructor(title, description, dueDate, priority) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.id = uuidv4();
-        this.completed = false;
+    constructor(task) {
+        this.title = task.title;
+        this.description = task.description;
+        this.dueDate = task.dueDate;
+        this.priority = task.priority;
+        this.id = task.id || uuidv4();
+        this.completed = task.completed || false;
+        this.inProject = task.inProject || ""
     }
 
     addToProject(project) {
-        this.isProjectIn = project.id
+        this.inProject = project.id
     }
 
-    changeCompleted() {
-        this.completed = !this.completed
+    toggleCompleted() {
+        this.completed = !this.completed;
         console.log(`${this.title} completed? ${this.completed}`)
+    }
+
+    editTask (task) {
+        console.log("check")
+        this.title = task.title;
+        this.description = task.description;
+        this.dueDate = task.dueDate;
+        this.priority = task.priority;
     }
 
     

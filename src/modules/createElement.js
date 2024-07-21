@@ -15,6 +15,7 @@ const createNewElement = (element, attributeList, textContent, listenerCallback,
     if (listenerCallback) {
         newElement.addEventListener("click", function (e) {
             e.stopPropagation()
+            e.preventDefault()
             listenerCallback(callbackProp)})
     }
 

@@ -15,21 +15,23 @@ const DOMController = function () {
             }
         })
 
-        const taskCompleted = createNewElement("input", {"class": "completed-checkbox"},"", taskItem.changeCompleted)
-        taskCompleted.setAttribute("type", "checkbox")
+        const taskCompleted = createNewElement("div", {"class": `completed-box ${taskItem.completed ? "task-complete" : "task-not-complete"}` },"", () => {
+            taskItem.toggleCompleted();
+            displayContainer.removeChild(taskOuter)
+            refresh()
+
+        })
         const taskDescription = createNewElement("div", {"class": "task-description hidden"}, taskItem.description)
-
         const taskTitle = createNewElement("div", {"class": "task-title"}, taskItem.title)
-
         const dueDate = createNewElement("div", {"class": "due-date"}, `Due: ${taskItem.dueDate}`)
+        const editTask = createNewElement("div", {"class": "edit-button"},"", modalControl, taskItem)
         const taskPriority = createNewElement("div", {"class": `priority-box ${taskItem.priority}`})
         const deleteTask = createNewElement("div", {"class": "delete-button"}, "", () => {
-            //need to add confirmation box
-            displayContainer.removeChild(taskOuter)
+            //need to add confirmation window
             Tasks.removeItem(taskItem)
+            refresh()
         })
 
-        const editTask = createNewElement("div", {"class": "edit-button"},"", modalControl, taskItem)
 
         taskOuter.appendChild(taskCompleted)
         taskOuter.appendChild(taskTitle)
@@ -50,14 +52,22 @@ const DOMController = function () {
             const taskOuter = createTaskItem(taskItem)
             displayContainer.appendChild(taskOuter)
         })
-
+        
         displayContainer.appendChild(addNewItem)
     }
 
-
-    return { createTaskDisplay, createNewElement }
+    return { createTaskDisplay, createNewElement}
 
 }();
+
+export const refresh = () => {
+    const buttons = document.querySelectorAll("li");
+    buttons.forEach( button => {
+        if ([...button.classList].includes("active")) {
+            button.click()
+        }
+    })
+}
 
 const buttonListeners = function () {
     const changeActiveClass = (target) => {
@@ -66,11 +76,11 @@ const buttonListeners = function () {
         target.classList.add("active")
     }
 
-    const addClickHandler = function (selector, callback) {
+    const addClickHandler = function (selector, callback, callbackProp = null) {
         const targetElement = document.querySelector(selector)
         targetElement.addEventListener("click", () => {
             changeActiveClass(targetElement);
-            DOMController.createTaskDisplay(callback())
+            DOMController.createTaskDisplay(callback(callbackProp))
         })
     }
 
@@ -83,4 +93,4 @@ const buttonListeners = function () {
 }();
 
 
-export default DOMController
+export default DOMController    
