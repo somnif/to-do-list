@@ -8,11 +8,12 @@ function currentDay() {
 
 function weekAhead() {
     console.log("current week")
+    return []
 
 }
 
 function seeAllTasks() {
-    console.log("show All Tasks")
+    console.log(Tasks)
     return Tasks.itemList
 }
 

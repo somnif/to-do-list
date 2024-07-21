@@ -14,5 +14,10 @@ export default class TaskItem {
         this.isProjectIn = project.id
     }
 
+    changeCompleted() {
+        this.completed = !this.completed
+        console.log(`${this.title} completed? ${this.completed}`)
+    }
+
     
 }

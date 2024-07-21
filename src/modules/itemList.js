@@ -8,8 +8,7 @@ export default class ItemList {
     }
 
     removeItem (removedItem) {
-        this.itemList = this.itemList.filter(item => item.id !== removedItem.id
-        )
+        this.itemList = this.itemList.filter(item => item.id !== removedItem.id)
     }
 }
 
