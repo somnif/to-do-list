@@ -1,30 +1,14 @@
-import { Projects, Tasks } from "./fileLoader";
+import DOMController from "./DOMController";
 
-function currentDay() {
-    console.log("current Day")
-    return Tasks.itemList.filter((item) => item.dueDate === "2022-12-10")
+export default class FilterButton {
+    constructor(name, filter, project) {
+        this.name = name;
+        this.filter = filter;
+        this.project = project || null
+        this.createButton()
+    }
+
+    createButton(){
+        DOMController.addFilterButton(this.name, this.filter, this.project)
+    }
 }
-
-function weekAhead() {
-    console.log("current week")
-    return []
-
-}
-
-function seeAllTasks() {
-    console.log(Tasks)
-    return Tasks.itemList
-}
-
-function returnCompleted() {
-    console.log("compeleted tasks")
-    return Tasks.itemList.filter((item) => item.completed === true)
-
-
-}
-
-function returnProjects (projectId) {
-
-}
-
-export { currentDay, weekAhead, seeAllTasks, returnCompleted, returnProjects}
