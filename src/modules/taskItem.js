@@ -8,25 +8,28 @@ export default class TaskItem {
         this.priority = task.priority;
         this.id = task.id || uuidv4();
         this.completed = task.completed || false;
-        this.inProject = task.inProject || ""
-    }
-
-    addToProject(project) {
-        this.inProject = project.id
+        this.project = task.project || ""
     }
 
     toggleCompleted() {
         this.completed = !this.completed;
-        console.log(`${this.title} completed? ${this.completed}`)
     }
 
     editTask (task) {
-        console.log("check")
         this.title = task.title;
         this.description = task.description;
         this.dueDate = task.dueDate;
         this.priority = task.priority;
+        this.project = task.project;
     }
-
     
+    exportData() {
+         return {"title": this.title, 
+                 "description": this.description, 
+                 "dueDate": this.dueDate, 
+                 "priority": this.priority, 
+                 "id": this.id,
+                 "completed": this.completed,
+                 "project": this.project}
+    }
 }

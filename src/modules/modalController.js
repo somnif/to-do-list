@@ -1,5 +1,7 @@
 import createNewElement from "./createElement";
-import { Tasks } from "./fileLoader"
+import TaskItem from "./taskItem";
+import ProjectItem from "./projectItem";
+import { Tasks, Projects } from "./fileLoader"
 import { refresh } from "./DOMController";
 import { format } from "date-fns"
 
@@ -24,22 +26,53 @@ function modalControl(existingTask) {
     const cancelButton = createNewElement("button", { "class": "submit-button" }, "Cancel", closeModal)
     const submitButton = createNewElement("button", { "class": "cancel-button" }, existingTask ? "Save Changes" : "Save New Task", addNewItem)
 
-    if (existingTask) {
-        titleField.value = existingTask.title;
-        dueDateField.value = existingTask.dueDate;
-        descriptionField.value = existingTask.description
-        Array(lowPriority, mediumPriority, highPriority, criticalPriority).forEach((option) => {
-            if (option.value === existingTask.priority) {
-                option.setAttribute("selected", "selected")
-            }
-        })
-    }
+    const projectLabel = createNewElement("label", { "for": "project" }, "Project:")
+    const projectFieldWrapper = createNewElement("div")
+    const projectField = createNewElement("select", { "name": "project" })
+    const projectDefault = createNewElement("option", { "value": "" }, "-Select a Project-")
+    projectField.appendChild(projectDefault)
+
+    Projects.itemList.forEach((item) => {
+        const projectOption = createNewElement("option", { "value": item.name }, item.name)
+        projectField.appendChild(projectOption)
+    })
+
+    const newProject = createNewElement("option", { "value": "new-project" }, "New Project...")
+    projectField.appendChild(newProject)
+
+    const newProjectField = createNewElement("input", { "name": "project" })
+    projectField.addEventListener("change", () => {
+        if (projectField.value === "new-project") {
+            projectFieldWrapper.innerHTML = ""
+            projectFieldWrapper.appendChild(newProjectField)
+            newProjectField.focus();
+        }
+    })
+
+    projectFieldWrapper.appendChild(projectField)
 
     priorityField.appendChild(lowPriority)
     priorityField.appendChild(mediumPriority)
     priorityField.appendChild(highPriority)
     priorityField.appendChild(criticalPriority)
 
+    if (existingTask) {
+        titleField.value = existingTask.title;
+        dueDateField.value = existingTask.dueDate;
+        descriptionField.value = existingTask.description
+        const priorityNodes = priorityField.childNodes
+
+        priorityField.childNodes.forEach((node) => {
+            if (node.value === existingTask.priority) {
+                node.setAttribute("selected", "selected")
+            }
+        })
+        projectField.childNodes.forEach((node) => {
+            if (node.value === existingTask.project) {
+                node.setAttribute("selected", "selected")
+            }
+        })
+    }
 
     formOuter.appendChild(legend)
     formOuter.appendChild(titleLabel)
@@ -50,11 +83,13 @@ function modalControl(existingTask) {
     formOuter.appendChild(priorityField)
     formOuter.appendChild(descriptionLabel)
     formOuter.appendChild(descriptionField)
+    formOuter.appendChild(projectLabel)
+    formOuter.appendChild(projectFieldWrapper)
+
     formOuter.appendChild(submitButton)
     formOuter.appendChild(cancelButton)
 
     dialog.appendChild(formOuter)
-
 
     dialog.showModal()
 
@@ -64,6 +99,8 @@ function modalControl(existingTask) {
     }
 
     function addNewItem() {
+
+        //Javascript Validation to check if Date and Title are empty.
         if (!dueDateField.value) {
             dueDateField.classList.add("required")
             dueDateField.setAttribute("placeholder", "A task name is required.")
@@ -83,16 +120,18 @@ function modalControl(existingTask) {
                 "title": titleField.value,
                 "dueDate": dueDateField.value,
                 "description": descriptionField.value,
-                "priority": priorityField.value
+                "priority": priorityField.value,
+                "project": newProjectField.value || projectField.value
             }
-            existingTask ? existingTask.editTask(taskInfo) : Tasks.addItem(taskInfo)
+            if (newProjectField.value) {
+                Projects.addItem(new ProjectItem({"name": newProjectField.value}))
+            }
+            existingTask ? existingTask.editTask(taskInfo) : Tasks.addItem(new TaskItem(taskInfo))
+            Tasks.writeData()
             closeModal();
             refresh();
         }
-
     }
-
-
 }
 
 export default modalControl

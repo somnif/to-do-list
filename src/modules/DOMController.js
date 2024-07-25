@@ -1,11 +1,10 @@
-import { Tasks } from "./fileLoader";
+import { Tasks, Projects } from "./fileLoader";
 import createNewElement from "./createElement"
 import modalControl from "./modalController"
 
 const DOMController = function () {
-
+    
     //New element creation using Vanilla Javascript module - following format ("element", {Obj of Attributes}, "InnerText", () => Callback for click listener)
-
     const displayContainer = document.querySelector(".container")
     const filterButtonList = document.querySelector("#filter-list")
     const projectButtonList = document.querySelector("#project-list")
@@ -31,6 +30,7 @@ const DOMController = function () {
 
         const taskCompleted = createNewElement("div", {"class": `completed-box ${taskItem.completed ? "task-complete" : "task-not-complete"}` },"", () => {
             taskItem.toggleCompleted();
+            Tasks.writeData()
             refresh()
 
         })
@@ -49,7 +49,6 @@ const DOMController = function () {
     const createTaskDisplay = (array) => {
         displayContainer.innerHTML = "";
         const addNewItem = createNewElement("div", {"class": ["add-task"]}, "Add New Item", modalControl)
-        console.log(array)
         array.forEach((taskItem) => {
             const taskOuter = createTaskItem(taskItem)
             displayContainer.appendChild(taskOuter)
@@ -64,7 +63,19 @@ const DOMController = function () {
             newButton.classList.add("active")
             createTaskDisplay(callback())
         })
-        project ? projectButtonList.appendChild(newButton) : filterButtonList.appendChild(newButton)
+
+        if (project) {
+            const deleteButton = createNewElement("div", {"class": "delete-project"}, "X", () => {
+                Projects.removeItem(project)  
+                projectButtonList.removeChild(newButton)
+            })
+            newButton.appendChild(deleteButton)
+            projectButtonList.appendChild(newButton)
+
+        } else {
+            filterButtonList.appendChild(newButton)
+
+        }
     }
 
     return { createTaskDisplay, addFilterButton } 
@@ -79,31 +90,5 @@ export const refresh = () => {
         }
     })
 }
-
-// const buttonListeners = function () {
-//     const changeActiveClass = (target) => {
-//         const allButtons = document.querySelectorAll("li")
-//         allButtons.forEach((button) => button.classList.remove("active"))
-//         target.classList.add("active")
-//     }
-
-//     const addClickHandler = function (selector, callback, callbackProp = null) {
-//         const targetElement = document.querySelector(selector)
-//         targetElement.addEventListener("click", () => {
-//             changeActiveClass(targetElement);
-//             DOMController.createTaskDisplay(callback(callbackProp))
-//         })
-//     }
-
-    //move the below to the filter module, maybe create a class of filters, and a subclass of project filters.
-
-//     addClickHandler("#all-tasks", seeAllTasks)
-//     addClickHandler("#the-week", weekAhead)
-//     addClickHandler("#my-day", currentDay)
-//     addClickHandler("#show-completed", returnCompleted)
-// }();
-
-
-
 
 export default DOMController    

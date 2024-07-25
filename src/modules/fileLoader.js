@@ -1,16 +1,16 @@
-import ItemList from "./itemList"
 import TaskItem from "./taskItem"
-//add localStorage import here
+import ProjectItem from "./projectItem"
+import ItemList from "./itemList"
 
-const trialTasks = {"taskList": [new TaskItem({"title": "Task One", "description": "Food is Great!", "dueDate": "2022-11-15", "priority": "task-critical"}),
-new TaskItem({"title": "Task Two", "description": "Complete the project report", "dueDate": "2022-11-15", "priority": "task-high"}),
-new TaskItem({"title": "Task Three", "description": "Attend the team meeting", "dueDate": "2022-11-20", "priority": "task-medium"}),
-new TaskItem({"title": "Task Three", "description": "Attend the team meeting", "dueDate": "2022-11-20", "priority": "task-medium"}),
-new TaskItem({"title": "Task Three", "description": "Attend the team meeting", "dueDate": "2022-11-20", "priority": "task-medium"}),
-new TaskItem({"title": "Task Three", "description": "Attend the team meeting", "dueDate": "2022-11-20", "priority": "task-medium"}),
+const fetchedTasks = localStorage.getItem("taskList")
+const fetchedProjects = localStorage.getItem("projectList")
 
-], "projectList": ["Team Projects", "Personal Projects"]
+const taskList = fetchedTasks ? JSON.parse(fetchedTasks).map(task => new TaskItem(task)) : []
+const projectList = fetchedProjects ? JSON.parse(fetchedProjects).map(project => new ProjectItem(project)) : []
+
+export const Projects = new ItemList("projectList", projectList)
+export const Tasks = new ItemList("taskList", taskList)
+
+export const handleWriteData = (item, savedData) => {
+    localStorage.setItem(item, savedData)
 }
-
-export const Projects = new ItemList(trialTasks.projectList)
-export const Tasks = new ItemList(trialTasks.taskList)
