@@ -6,11 +6,10 @@ import { refresh } from "./DOMController";
 import { format } from "date-fns"
 
 function modalControl(existingTask) {
+    //Creating all required form elements
     const dialog = document.getElementById("modal-box");
-
     const formOuter = createNewElement("form", { "method": "dialog" })
     const legend = createNewElement("legend", {}, existingTask ? `Edit your task: "${existingTask.title}"` : "Create your new Task")
-
     const titleLabel = createNewElement("label", { "for": "title" }, "Task Name:")
     const dueDateLabel = createNewElement("label", { "for": "dueDate" }, "Date Due:")
     const priorityLabel = createNewElement("label", { "for": "priority" }, "Task Priority:")
@@ -19,19 +18,20 @@ function modalControl(existingTask) {
     const dueDateField = createNewElement("input", { "type": "date", "name": "dueDate", "required": "required", "value": format(Date.now(), "yyyy-MM-dd") })
     const descriptionField = createNewElement("input", { "type": "field" })
     const priorityField = createNewElement("select", { "name": "priority" })
-    const lowPriority = createNewElement("option", { "value": "task-low" }, "Low")
-    const mediumPriority = createNewElement("option", { "value": "task-medium" }, "Medium")
-    const highPriority = createNewElement("option", { "value": "task-high" }, "High")
-    const criticalPriority = createNewElement("option", { "value": "task-critical" }, "Critical")
-    const cancelButton = createNewElement("button", { "class": "submit-button" }, "Cancel", closeModal)
-    const submitButton = createNewElement("button", { "class": "cancel-button" }, existingTask ? "Save Changes" : "Save New Task", addNewItem)
-
+    const priorityOptions = ["low", "medium", "high", "critical"]
+    priorityOptions.forEach((option) => {
+        const innerText = option.charAt(0).toUpperCase() + option.slice(1)
+        const newOption = createNewElement("option", {"value": `task-${option}`}, innerText)
+        priorityField.appendChild(newOption)
+    })   
     const projectLabel = createNewElement("label", { "for": "project" }, "Project:")
     const projectFieldWrapper = createNewElement("div")
     const projectField = createNewElement("select", { "name": "project" })
     const projectDefault = createNewElement("option", { "value": "" }, "-Select a Project-")
-    projectField.appendChild(projectDefault)
+    const cancelButton = createNewElement("button", { "class": "submit-button" }, "Cancel", closeModal)
+    const submitButton = createNewElement("button", { "class": "cancel-button" }, existingTask ? "Save Changes" : "Save New Task", addNewItem)
 
+    projectField.appendChild(projectDefault)
     Projects.itemList.forEach((item) => {
         const projectOption = createNewElement("option", { "value": item.name }, item.name)
         projectField.appendChild(projectOption)
@@ -50,12 +50,9 @@ function modalControl(existingTask) {
     })
 
     projectFieldWrapper.appendChild(projectField)
+    
 
-    priorityField.appendChild(lowPriority)
-    priorityField.appendChild(mediumPriority)
-    priorityField.appendChild(highPriority)
-    priorityField.appendChild(criticalPriority)
-
+    //Populate the input fields if there is an existing task being edited
     if (existingTask) {
         titleField.value = existingTask.title;
         dueDateField.value = existingTask.dueDate;
@@ -85,7 +82,6 @@ function modalControl(existingTask) {
     formOuter.appendChild(descriptionField)
     formOuter.appendChild(projectLabel)
     formOuter.appendChild(projectFieldWrapper)
-
     formOuter.appendChild(submitButton)
     formOuter.appendChild(cancelButton)
 
