@@ -48,13 +48,11 @@ const DOMController = function () {
 
     const createTaskDisplay = (array) => {
         displayContainer.innerHTML = "";
-        const addNewItem = createNewElement("div", {"class": ["add-task"]}, "Add New Item", modalControl)
         array.forEach((taskItem) => {
             const taskOuter = createTaskItem(taskItem)
             displayContainer.appendChild(taskOuter)
         })
         
-        displayContainer.appendChild(addNewItem)
     }
     
     const addFilterButton = function (innerText, callback, project) {
@@ -65,7 +63,7 @@ const DOMController = function () {
         })
 
         if (project) {
-            const deleteButton = createNewElement("div", {"class": "delete-project"}, "X", () => {
+            const deleteButton = createNewElement("div", {"class": "delete-project"}, "", () => {
                 Projects.removeItem(project)  
                 projectButtonList.removeChild(newButton)
             })
@@ -77,6 +75,11 @@ const DOMController = function () {
 
         }
     }
+
+    const header = document.querySelector("header")
+    const addNewItem = createNewElement("div", {"class": ["add-task"]}, "Add Item", modalControl)
+    header.appendChild(addNewItem)
+
 
     return { createTaskDisplay, addFilterButton } 
 

@@ -9,10 +9,6 @@ export default class FilterButton {
         this.name = name;
         this.filter = filter;
         this.project = project || null
-        this.createButton()
-    }
-
-    createButton(){
         DOMController.addFilterButton(this.name, () => Tasks.itemList.filter(this.filter).sort(sortByDays), this.project)
     }
 }

@@ -8,8 +8,9 @@ import { format } from "date-fns"
 function modalControl(existingTask) {
     //Creating all required form elements
     const dialog = document.getElementById("modal-box");
+    dialog.innerHTML = "";
     const formOuter = createNewElement("form", { "method": "dialog" })
-    const legend = createNewElement("legend", {}, existingTask ? `Edit your task: "${existingTask.title}"` : "Create your new Task")
+    const legend = createNewElement("legend", {}, existingTask ? `Edit your Task: "${existingTask.title}"` : "Create your New Task")
     const titleLabel = createNewElement("label", { "for": "title" }, "Task Name:")
     const dueDateLabel = createNewElement("label", { "for": "dueDate" }, "Date Due:")
     const priorityLabel = createNewElement("label", { "for": "priority" }, "Task Priority:")
@@ -28,8 +29,8 @@ function modalControl(existingTask) {
     const projectFieldWrapper = createNewElement("div")
     const projectField = createNewElement("select", { "name": "project" })
     const projectDefault = createNewElement("option", { "value": "" }, "-Select a Project-")
-    const cancelButton = createNewElement("button", { "class": "submit-button" }, "Cancel", closeModal)
-    const submitButton = createNewElement("button", { "class": "cancel-button" }, existingTask ? "Save Changes" : "Save New Task", addNewItem)
+    const cancelButton = createNewElement("button", { "class": "cancel-button" }, "Cancel", closeModal)
+    const submitButton = createNewElement("button", { "class": "submit-button" }, existingTask ? "Save Changes" : "Save New Task", addNewItem)
 
     projectField.appendChild(projectDefault)
     Projects.itemList.forEach((item) => {
@@ -76,14 +77,14 @@ function modalControl(existingTask) {
     formOuter.appendChild(titleField)
     formOuter.appendChild(dueDateLabel)
     formOuter.appendChild(dueDateField)
-    formOuter.appendChild(priorityLabel)
-    formOuter.appendChild(priorityField)
     formOuter.appendChild(descriptionLabel)
     formOuter.appendChild(descriptionField)
+    formOuter.appendChild(priorityLabel)
+    formOuter.appendChild(priorityField)
     formOuter.appendChild(projectLabel)
     formOuter.appendChild(projectFieldWrapper)
-    formOuter.appendChild(submitButton)
     formOuter.appendChild(cancelButton)
+    formOuter.appendChild(submitButton)
 
     dialog.appendChild(formOuter)
 

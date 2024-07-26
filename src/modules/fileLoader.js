@@ -1,12 +1,14 @@
 import TaskItem from "./taskItem"
 import ProjectItem from "./projectItem"
 import ItemList from "./itemList"
+import { trialTasks, trialProjects } from "./defaultData";
 
-const fetchedTasks = localStorage.getItem("taskList")
-const fetchedProjects = localStorage.getItem("projectList")
 
-const taskList = fetchedTasks ? JSON.parse(fetchedTasks).map(task => new TaskItem(task)) : []
-const projectList = fetchedProjects ? JSON.parse(fetchedProjects).map(project => new ProjectItem(project)) : []
+const fetchedTasks = localStorage.getItem("taskList") || trialTasks;
+const fetchedProjects = localStorage.getItem("projectList") || trialProjects
+
+const taskList = JSON.parse(fetchedTasks).map(task => new TaskItem(task))
+const projectList = JSON.parse(fetchedProjects).map(project => new ProjectItem(project))
 
 export const Projects = new ItemList("projectList", projectList)
 export const Tasks = new ItemList("taskList", taskList)
